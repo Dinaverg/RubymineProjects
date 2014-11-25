@@ -1,0 +1,24 @@
+require 'socket'
+require 'thread'
+puts "engage..."
+
+tasks=Queue.new
+
+pool = Array.new
+16.times do
+  Thread.new do
+    tasks.pop.puts "Hey."
+  end
+  pool << Thread.new
+end
+
+server = TCPServer.open(8712) {
+  server.accept do |client|
+    if tasks.length < n
+      tasks << client
+    else
+      client.puts "busy..."
+    end
+  end
+}
+pool.map(&:join)
