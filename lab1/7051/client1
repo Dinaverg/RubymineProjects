@@ -1,0 +1,18 @@
+require 'socket'
+20.times do
+s = TCPSocket.open("localhost",8712)
+reply = s.gets
+puts reply
+s.puts "HELO text\n"
+puts "helo sent"
+heloc = s.gets.chomp.split(";")
+heloc.each {|l| puts l}
+s.puts "Yo!"
+echo = s.gets
+puts echo
+s.close
+end
+k = TCPSocket.open("localhost",8712)
+k.puts "KILL_SERVICE\n"
+gasp = k.gets
+puts gasp

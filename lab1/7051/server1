@@ -1,24 +1,64 @@
 require 'socket'
 require 'thread'
-puts "engage..."
+require 'ipaddr'
+require 'active_support/core_ext/integer/inflections'
+puts "engage server on port #{ARGV[0]}"
+on = true
 
 tasks=Queue.new
-
+messages=Queue.new
 pool = Array.new
-16.times do
-  Thread.new do
-    tasks.pop.puts "Hey."
-  end
-  pool << Thread.new
+Thread.abort_on_exception = true
+("A".."P").each do |id|
+  worker=Thread.new do
+    thrid=id
+    while on
+      customer = tasks.pop
+      customer.puts "Hey, it's thread #{thrid}"
+      loop do
+        message = customer.recv(1024)
+      case message
+        when "KILL_SERVICE\n"
+          puts "fuuuuuuuu-"
+          customer.puts 'ded'
+          raise 'Killed by client'
+        when "HELO text\n"
+          ips=Socket.ip_address_list.select {|ip| ip.ipv4?}
+          ipaddr=ips.map {|ip| ip.ip_address}
+          helo = "HELO text;IP: #{ipaddr.join(", ")};Port: #{ARGV[0]};StudentID: 14336143"
+          customer.puts helo
+          puts "thread #{thrid} said helo"
+        when ''
+          puts "Connection broke!"
+          break
+        else
+          begin
+          puts "client says: #{message}"
+          messages<<message #unless message ==''
+          puts messages.length
+          customer.puts "message #{messages.length.ordinalize} in queue"
+          rescue Errno::EPIPE
+            end
+      end
+      end
+      end
+    puts "um..."
+    end
+  pool << worker
+  puts "Thread #{id} ready for action"
 end
 
-server = TCPServer.open(8712) {
-  server.accept do |client|
-    if tasks.length < n
+server = Socket.tcp_server_loop(ARGV[0]) do |client|
+  begin
+    if tasks.length < 1600
       tasks << client
     else
       client.puts "busy..."
+      client.close
+      puts 'block'
     end
   end
-}
+end
+
+puts "out"
 pool.map(&:join)
