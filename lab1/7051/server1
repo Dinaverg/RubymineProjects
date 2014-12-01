@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require 'socket'
 require 'thread'
 require 'ipaddr'
