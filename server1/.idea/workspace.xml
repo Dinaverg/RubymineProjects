@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7bed31bd-a93c-454a-b42a-477f648dcc41" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../lab1/7051/server1" afterPath="$PROJECT_DIR$/../lab1/7051/server1" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../lab1/7051/start.sh" afterPath="$PROJECT_DIR$/../lab1/7051/start.sh" />
-    </list>
+    <list default="true" id="7bed31bd-a93c-454a-b42a-477f648dcc41" name="Default" comment="" />
     <ignored path="server1.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
